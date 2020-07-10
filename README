@@ -1,0 +1,62 @@
+OPREA IOAN LUCIAN 323CA
+
+Detalii Implementare:
+	Pentru implementarea comunicarii cu REST API am folosit codul din 
+laboratorul 10 adaugand biblioteca recomandata din parson.Pe aceasta o utilizez 
+in momentul in care trimit mesaje catre server si la anumite functii pentru care 
+am de extras cookieul sau tokenul ce atesta ca sunt logat sau ca am acces la 
+biblioteca.Pentru raspunsul din partea serverului nu am folosit biblioteca 
+pentru parsarea mesajului ci am afisat cu printf la stdin raspunsul.
+
+Detalii Functii:
+
+-> prima comanda implementata a fost register ce ilustreaza inregistrarea unui
+cont.Pentru aceasta am folosit documentatia de pe github pentru a creea un mesaj
+de tip parson pentru a-l trimite la server.Am procedat asemanator ca in 
+laborator cand a trebuit sa trimit si sa primesc mesajul intrucat se modifica 
+doar tipul payloadului si ruta de acces.Ofera prompt pentru username si parola.
+
+-> a doua comanda ceea de login reprezinta autentificarea userului si asemenea
+celei anterioare ofera prompt pentru user si parola.Am procedat analog singura
+deosebire fiind faptul ca a trebuit sa extrag cookie-ul din response pentru a
+demonstra faptul ca clientul este autentificat si poate utiliza biblioteca 
+virtuala.
+
+-> comanda enter_library este utilizata pentru ca un client sa poata avea 
+dreptul de a modifica biblioteca online.(clientul e obligatoriu sa fie logat).
+Din raspunsul de la server obtinem tokenul JWT.Spre deosebire de celelalte 
+comenzi campul cookies din cadrul requestului nu va mai fi null intrucat se
+prespune ca suntem conectati si aveam cookie-ul de sesiune.
+
+-> comanda get_books are ca scop afisarea tuturor cartilor ce apartin librariei.
+Pentru a efectua aceasta comanda va trebui ca tokenul si cookie-ul sa fie setate
+adica clientul sa fi efectuat deja "login" si "enter_library".Raspunsul de la
+server se afiseaza la stdin(insemnand toate cartile din biblioteca).Functia
+get_request va primii "token" si "cookie" intrucat clientul e logat si are 
+acces la biblioteca.
+
+-> comanda get_book poate fi utilizata daca exista cookie-ul de sesiune si
+tokenul JWT astfel oferind un prompt pentru id-ul cartii dorite.Adaug la ruta
+de acces acest id parsat de la tastatura si trimit catre server cererea http 
+cu ajutorul functiei compute_get_request.Raspunsul de la server il afisez la
+stdin.
+
+-> comanda add_book ofera mai multe prompturi in care scriem informatiile 
+referitoare la cartea pe care dorim sa o adaugam.Asemenea celorlalte comenzi
+legate de biblioteca avem nevoie de cookie-ul de sesiune si tokenul JWT.Formam
+mesajul de tip parson cu functiile din biblioteca de pe github si trimitem
+o cerere de tip http.Raspunsul il afisez la stdin.
+
+-> comanda delete_book are prompt pentru id astfel incat sa putem alege ce
+carte eliminam din cadrul bibliotecii(avem nevoie sa fie setate cele 2 campuri
+importante -tokenul si cookie-ul de sesiune).Pentru a vedea id-ul cartii putem
+da o comanda get_books inainte intrucat id-ul este generat de catre server.
+
+
+-> comanda logout va dezloga userul conectat la server deci va seta la NULL 
+atat cookie-ul de sesiune cat si tokenul JWT.
+
+-> comanda exit termina fluxul programului.
+
+
+
